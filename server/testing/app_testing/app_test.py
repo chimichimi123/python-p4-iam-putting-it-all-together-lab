@@ -90,7 +90,7 @@ class TestCheckSession:
         with app.test_client() as client:
 
             # create a new first record
-            client.post('/signup', json={
+            response = client.post('/signup', json={
                 'username': 'ashketchum',
                 'password': 'pikachu',
                 'bio': '''I wanna be the very best
@@ -103,12 +103,14 @@ class TestCheckSession:
                         The power that's inside''',
                 'image_url': 'https://cdn.vox-cdn.com/thumbor/I3GEucLDPT6sRdISXmY_Yh8IzDw=/0x0:1920x1080/1820x1024/filters:focal(960x540:961x541)/cdn.vox-cdn.com/uploads/chorus_asset/file/24185682/Ash_Ketchum_World_Champion_Screenshot_4.jpg',
             })
+            print(response.data)  # Print the response from the POST request
             
             with client.session_transaction() as session:
                 
                 session['user_id'] = 1
 
             response = client.get('/check_session')
+            print(response.data)  # Print the response from the GET request
             response_json = response.json
 
             assert response_json['id'] == 1
